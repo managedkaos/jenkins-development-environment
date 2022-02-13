@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.0.5"
+  required_version = "~> 1.0.11"
 
   required_providers {
     aws = {
@@ -17,16 +17,11 @@ terraform {
   }
 
   backend "s3" {
-    key    = "ENTER_THE_S3_KEY_HERE/terraform.tfstate"
-    bucket = "ENTER_THE_S3_BUCKET_HERE"
-    region = "ENTER_THE_S3_REGION_HERE"
+    key    = "terraform.tfstate"
+    bucket = "jenkins-development-environment"
+    region = "us-west-2"
   }
 }
 
 provider "aws" {
-  default_tags {
-    tags = {
-      Terraform = true
-    }
-  }
 }
