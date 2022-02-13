@@ -1,0 +1,12 @@
+<powershell>
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+choco feature enable -n allowGlobalConfirmation
+choco install nssm -y
+choco install openssh --pre -y
+choco install microsoft-edge git nodejs yarn vim vscode awscli archiver -y
+choco install dotnetcore dotnet4.7.2 -y
+
+New-NetFirewallRule -Name ssh -DisplayName 'ssh' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+Restart-Computer
+</powershell>

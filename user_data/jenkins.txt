@@ -1,0 +1,36 @@
+#!/bin/bash
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io.key | tee \
+    /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+    https://pkg.jenkins.io/debian-stable binary/ | tee \
+    /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+apt update
+apt -y upgrade
+apt -y install openjdk-11-jdk nginx
+apt -y install jenkins
+
+unlink /etc/nginx/sites-enabled/default
+
+tee /etc/nginx/conf.d/jenkins.conf <<EOF
+upstream jenkins {
+    server 127.0.0.1:8080;
+}
+
+server {
+    listen 80 default_server;
+    listen [::]:80  default_server;
+    location / {
+        proxy_pass http://jenkins;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+    }
+}
+EOF
+
+systemctl reload nginx
+systemctl status nginx  | grep Active
+systemctl status jenkins  | grep Active

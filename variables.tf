@@ -25,7 +25,7 @@ variable "tags" {
 variable "ami" {
   type = map(any)
   default = {
-    "ubuntu-20" = {
+    "ubuntu" = {
       "owners"              = ["099720109477"]
       "name"                = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
       "virtualization_type" = ["hvm"]
