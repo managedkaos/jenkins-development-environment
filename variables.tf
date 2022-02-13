@@ -10,6 +10,12 @@ variable "environment" {
   description = "The environment to assign to resource in this module"
 }
 
+variable "vpc_id" {
+  type        = string
+  default     = "vpc-099756a148825974e"
+  description = "Just another default VPC"
+}
+
 variable "tags" {
   type        = map(any)
   default     = {}
