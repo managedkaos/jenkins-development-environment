@@ -2,21 +2,6 @@ locals {
   jenkins_tags = merge({ Name : "jenkins-server" }, var.tags, local.tags)
 }
 
-resource "aws_key_pair" "jenkins" {
-  key_name_prefix = "jenkins-server-"
-  public_key      = file("${path.module}/keys/jenkins-server.pub")
-
-  lifecycle {
-    create_before_destroy = false
-  }
-
-  tags = merge(local.jenkins_tags, {
-    git_file = "jenkins.tf"
-    git_org  = "managedkaos"
-    git_repo = "jenkins-development-environment"
-  })
-}
-
 resource "aws_security_group" "jenkins" {
   name_prefix = "jenkins-server-"
   description = "jenkins"
@@ -55,7 +40,7 @@ resource "aws_instance" "jenkins" {
   associate_public_ip_address = true
   disable_api_termination     = false
   user_data                   = file("${path.module}/user_data/jenkins.txt")
-  key_name                    = aws_key_pair.jenkins.id
+  key_name                    = aws_key_pair.key["ubuntu"].key_name
   security_groups             = [aws_security_group.jenkins.name]
   volume_tags                 = local.jenkins_tags
   tags                        = local.jenkins_tags

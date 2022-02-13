@@ -2,16 +2,6 @@ locals {
   windows_tags = merge({ Name : "windows-server" }, var.tags, local.tags)
 }
 
-resource "aws_key_pair" "windows" {
-  key_name_prefix = "windows-server-"
-  public_key      = file("${path.module}/keys/windows-server.pub")
-  tags            = local.windows_tags
-
-  lifecycle {
-    create_before_destroy = false
-  }
-}
-
 resource "aws_security_group" "windows" {
   name_prefix = "windows-server-"
   description = "windows-server"
@@ -50,7 +40,7 @@ resource "aws_instance" "windows" {
   associate_public_ip_address = true
   disable_api_termination     = false
   user_data                   = file("${path.module}/user_data/windows.txt")
-  key_name                    = aws_key_pair.windows.key_name
+  key_name                    = aws_key_pair.key["windows"].key_name
   security_groups             = [aws_security_group.windows.name]
   volume_tags                 = local.windows_tags
   tags = merge(local.windows_tags, {

@@ -2,21 +2,6 @@ locals {
   build_server_tags = merge({ Name : "build-server" }, var.tags, local.tags)
 }
 
-resource "aws_key_pair" "build" {
-  key_name_prefix = "build-server-"
-  public_key      = file("${path.module}/keys/build-server.pub")
-
-  lifecycle {
-    create_before_destroy = false
-  }
-
-  tags = merge(local.build_server_tags, {
-    git_file = "build-server.tf"
-    git_org  = "managedkaos"
-    git_repo = "jenkins-development-environment"
-  })
-}
-
 resource "aws_security_group" "build" {
   name_prefix = "build-server-"
   description = "build"
@@ -49,7 +34,7 @@ resource "aws_instance" "build" {
   associate_public_ip_address = true
   disable_api_termination     = false
   user_data                   = file("${path.module}/user_data/build-server.txt")
-  key_name                    = aws_key_pair.build.id
+  key_name                    = aws_key_pair.key["amazon"].key_name
   security_groups             = [aws_security_group.build.name]
   volume_tags                 = local.build_server_tags
   tags                        = local.build_server_tags
