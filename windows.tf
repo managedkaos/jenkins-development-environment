@@ -12,7 +12,11 @@ resource "aws_security_group" "windows" {
   name_prefix = "windows-server-"
   description = "windows-server"
   vpc_id      = var.vpc_id
-  tags        = local.windows_tags
+  tags = merge(local.windows_tags, {
+    git_file = "windows.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 
   ingress {
     from_port   = 22
@@ -53,11 +57,19 @@ resource "aws_instance" "windows" {
 }
 
 resource "aws_eip" "windows" {
-  vpc  = true
-  tags = local.windows_tags
+  vpc = true
+  tags = merge(local.windows_tags, {
+    git_file = "windows.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 }
 
 resource "aws_eip_association" "windows" {
   instance_id   = aws_instance.windows.id
   allocation_id = aws_eip.windows.id
+}
+
+output "windows" {
+  value = aws_instance.jenkins.public_dns
 }

@@ -5,14 +5,22 @@ locals {
 resource "aws_key_pair" "build" {
   key_name   = "build-server"
   public_key = file("${path.module}/keys/build-server.pub")
-  tags       = local.build_server_tags
+  tags = merge(local.build_server_tags, {
+    git_file = "build-server.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 }
 
 resource "aws_security_group" "build" {
   name_prefix = "build-server-"
   description = "build"
   vpc_id      = var.vpc_id
-  tags        = local.build_server_tags
+  tags = merge(local.build_server_tags, {
+    git_file = "build-server.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 
   ingress {
     from_port       = 22
@@ -48,11 +56,19 @@ resource "aws_instance" "build" {
 
 
 resource "aws_eip" "build" {
-  vpc  = true
-  tags = local.build_server_tags
+  vpc = true
+  tags = merge(local.build_server_tags, {
+    git_file = "build-server.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 }
 
 resource "aws_eip_association" "build" {
   instance_id   = aws_instance.build.id
   allocation_id = aws_eip.build.id
+}
+
+output "build" {
+  value = aws_instance.jenkins.public_dns
 }

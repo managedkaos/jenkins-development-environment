@@ -5,14 +5,22 @@ locals {
 resource "aws_key_pair" "jenkins" {
   key_name   = "jenkins-server"
   public_key = file("${path.module}/keys/jenkins-server.pub")
-  tags       = local.jenkins_tags
+  tags = merge(local.jenkins_tags, {
+    git_file = "jenkins.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 }
 
 resource "aws_security_group" "jenkins" {
   name_prefix = "jenkins-server-"
   description = "jenkins"
   vpc_id      = var.vpc_id
-  tags        = local.jenkins_tags
+  tags = merge(local.jenkins_tags, {
+    git_file = "jenkins.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 
   ingress {
     from_port   = 22
@@ -53,11 +61,19 @@ resource "aws_instance" "jenkins" {
 }
 
 resource "aws_eip" "jenkins" {
-  vpc  = true
-  tags = local.jenkins_tags
+  vpc = true
+  tags = merge(local.jenkins_tags, {
+    git_file = "jenkins.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 }
 
 resource "aws_eip_association" "jenkins" {
   instance_id   = aws_instance.jenkins.id
   allocation_id = aws_eip.jenkins.id
+}
+
+output "jenkins" {
+  value = aws_instance.jenkins.public_dns
 }
