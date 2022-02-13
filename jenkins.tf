@@ -60,4 +60,5 @@ resource "aws_eip" "jenkins" {
 resource "aws_eip_association" "jenkins" {
   instance_id   = aws_instance.jenkins.id
   allocation_id = aws_eip.jenkins.id
+
 }
