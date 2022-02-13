@@ -45,3 +45,13 @@ resource "aws_instance" "build" {
     create_before_destroy = "true"
   }
 }
+
+
+resource "aws_eip" "build" {
+  vpc = true
+}
+
+resource "aws_eip_association" "build" {
+  instance_id   = aws_instance.build.id
+  allocation_id = aws_eip.build.id
+}

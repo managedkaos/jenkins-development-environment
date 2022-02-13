@@ -51,3 +51,12 @@ resource "aws_instance" "windows" {
     create_before_destroy = "true"
   }
 }
+
+resource "aws_eip" "windows" {
+  vpc = true
+}
+
+resource "aws_eip_association" "windows" {
+  instance_id   = aws_instance.windows.id
+  allocation_id = aws_eip.windows.id
+}
