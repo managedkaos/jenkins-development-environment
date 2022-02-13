@@ -74,6 +74,10 @@ resource "aws_eip_association" "windows" {
   allocation_id = aws_eip.windows.id
 }
 
-output "windows" {
-  value = aws_instance.jenkins.public_dns
+output "windows_public_dns" {
+  value = aws_instance.windows.public_dns
+}
+
+output "windows_instance_id" {
+  value = aws_instance.windows.id
 }

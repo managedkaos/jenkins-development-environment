@@ -69,6 +69,10 @@ resource "aws_eip_association" "build" {
   allocation_id = aws_eip.build.id
 }
 
-output "build" {
+output "build_public_dns" {
   value = aws_instance.jenkins.public_dns
+}
+
+output "build_instance_id" {
+  value = aws_instance.build.id
 }

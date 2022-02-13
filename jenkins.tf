@@ -74,6 +74,10 @@ resource "aws_eip_association" "jenkins" {
   allocation_id = aws_eip.jenkins.id
 }
 
-output "jenkins" {
+output "jenkins_public_dns" {
   value = aws_instance.jenkins.public_dns
+}
+
+output "jenkins_instance_id" {
+  value = aws_instance.jenkins.id
 }
