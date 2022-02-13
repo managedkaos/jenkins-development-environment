@@ -3,8 +3,13 @@ locals {
 }
 
 resource "aws_key_pair" "jenkins" {
-  key_name   = "jenkins-server"
-  public_key = file("${path.module}/keys/jenkins-server.pub")
+  key_name_prefix = "jenkins-server-"
+  public_key      = file("${path.module}/keys/jenkins-server.pub")
+
+  lifecycle {
+    create_before_destroy = false
+  }
+
   tags = merge(local.jenkins_tags, {
     git_file = "jenkins.tf"
     git_org  = "managedkaos"
@@ -56,7 +61,7 @@ resource "aws_instance" "jenkins" {
   tags                        = local.jenkins_tags
 
   lifecycle {
-    create_before_destroy = "true"
+    create_before_destroy = true
   }
 }
 

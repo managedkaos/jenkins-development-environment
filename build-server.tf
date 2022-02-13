@@ -3,8 +3,13 @@ locals {
 }
 
 resource "aws_key_pair" "build" {
-  key_name   = "build-server"
-  public_key = file("${path.module}/keys/build-server.pub")
+  key_name_prefix = "build-server-"
+  public_key      = file("${path.module}/keys/build-server.pub")
+
+  lifecycle {
+    create_before_destroy = false
+  }
+
   tags = merge(local.build_server_tags, {
     git_file = "build-server.tf"
     git_org  = "managedkaos"
@@ -50,7 +55,7 @@ resource "aws_instance" "build" {
   tags                        = local.build_server_tags
 
   lifecycle {
-    create_before_destroy = "true"
+    create_before_destroy = true
   }
 }
 

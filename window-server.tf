@@ -3,9 +3,13 @@ locals {
 }
 
 resource "aws_key_pair" "windows" {
-  key_name   = "windows-server"
-  public_key = file("${path.module}/keys/windows-server.pub")
-  tags       = local.windows_tags
+  key_name_prefix = "windows-server-"
+  public_key      = file("${path.module}/keys/windows-server.pub")
+  tags            = local.windows_tags
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_security_group" "windows" {
@@ -45,10 +49,10 @@ resource "aws_instance" "windows" {
   instance_type               = "t3a.medium"
   associate_public_ip_address = true
   disable_api_termination     = false
-  # user_data                   = file("${path.module}/user_data/windows.txt")
-  key_name        = aws_key_pair.windows.key_name
-  security_groups = [aws_security_group.windows.name]
-  volume_tags     = local.windows_tags
+  user_data                   = file("${path.module}/user_data/windows.txt")
+  key_name                    = aws_key_pair.windows.key_name
+  security_groups             = [aws_security_group.windows.name]
+  volume_tags                 = local.windows_tags
   tags = merge(local.windows_tags, {
     git_file = "windows.tf"
     git_org  = "managedkaos"
@@ -56,7 +60,7 @@ resource "aws_instance" "windows" {
   })
 
   lifecycle {
-    create_before_destroy = "true"
+    create_before_destroy = true
   }
 }
 
