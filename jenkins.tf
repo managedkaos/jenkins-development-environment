@@ -44,8 +44,8 @@ resource "aws_instance" "jenkins" {
   user_data                   = file("${path.module}/user_data/jenkins.txt")
   key_name                    = aws_key_pair.jenkins.id
   security_groups             = [aws_security_group.jenkins.name]
-  tags                        = local.jenkins_tags
   volume_tags                 = local.jenkins_tags
+  tags                        = local.jenkins_tags
 
   lifecycle {
     create_before_destroy = "true"
@@ -53,7 +53,8 @@ resource "aws_instance" "jenkins" {
 }
 
 resource "aws_eip" "jenkins" {
-  vpc = true
+  vpc  = true
+  tags = local.jenkins_tags
 }
 
 resource "aws_eip_association" "jenkins" {

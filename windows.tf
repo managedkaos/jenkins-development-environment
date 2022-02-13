@@ -44,8 +44,8 @@ resource "aws_instance" "windows" {
   user_data                   = file("${path.module}/user_data/windows.txt")
   key_name                    = aws_key_pair.windows.key_name
   security_groups             = [aws_security_group.windows.name]
-  tags                        = local.windows_tags
   volume_tags                 = local.windows_tags
+  tags                        = local.windows_tags
 
   lifecycle {
     create_before_destroy = "true"
@@ -53,7 +53,8 @@ resource "aws_instance" "windows" {
 }
 
 resource "aws_eip" "windows" {
-  vpc = true
+  vpc  = true
+  tags = local.windows_tags
 }
 
 resource "aws_eip_association" "windows" {

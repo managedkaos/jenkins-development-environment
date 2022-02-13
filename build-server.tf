@@ -38,8 +38,8 @@ resource "aws_instance" "build" {
   user_data                   = file("${path.module}/user_data/build-server.txt")
   key_name                    = aws_key_pair.build.id
   security_groups             = [aws_security_group.build.name]
-  tags                        = local.build_server_tags
   volume_tags                 = local.build_server_tags
+  tags                        = local.build_server_tags
 
   lifecycle {
     create_before_destroy = "true"
@@ -48,7 +48,8 @@ resource "aws_instance" "build" {
 
 
 resource "aws_eip" "build" {
-  vpc = true
+  vpc  = true
+  tags = local.build_server_tags
 }
 
 resource "aws_eip_association" "build" {
