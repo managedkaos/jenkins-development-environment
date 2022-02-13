@@ -49,7 +49,11 @@ resource "aws_instance" "windows" {
   key_name        = aws_key_pair.windows.key_name
   security_groups = [aws_security_group.windows.name]
   volume_tags     = local.windows_tags
-  tags            = local.windows_tags
+  tags = merge(local.windows_tags, {
+    git_file = "windows.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 
   lifecycle {
     create_before_destroy = "true"
