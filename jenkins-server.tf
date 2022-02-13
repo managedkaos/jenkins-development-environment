@@ -7,7 +7,7 @@ resource "aws_security_group" "jenkins" {
   description = "jenkins"
   vpc_id      = var.vpc_id
   tags = merge(local.jenkins_tags, {
-    git_file = "jenkins.tf"
+    git_file = "jenkins-server.tf"
     git_org  = "managedkaos"
     git_repo = "jenkins-development-environment"
   })
@@ -43,7 +43,11 @@ resource "aws_instance" "jenkins" {
   key_name                    = aws_key_pair.key["ubuntu"].key_name
   security_groups             = [aws_security_group.jenkins.name]
   volume_tags                 = local.jenkins_tags
-  tags                        = local.jenkins_tags
+  tags = merge(local.jenkins_tags, {
+    git_file = "jenkins-server.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 
   lifecycle {
     create_before_destroy = true
@@ -53,7 +57,7 @@ resource "aws_instance" "jenkins" {
 resource "aws_eip" "jenkins" {
   vpc = true
   tags = merge(local.jenkins_tags, {
-    git_file = "jenkins.tf"
+    git_file = "jenkins-server.tf"
     git_org  = "managedkaos"
     git_repo = "jenkins-development-environment"
   })

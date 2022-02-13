@@ -7,7 +7,7 @@ resource "aws_security_group" "windows" {
   description = "windows-server"
   vpc_id      = var.vpc_id
   tags = merge(local.windows_tags, {
-    git_file = "windows.tf"
+    git_file = "window-server.tf"
     git_org  = "managedkaos"
     git_repo = "jenkins-development-environment"
   })
@@ -44,7 +44,7 @@ resource "aws_instance" "windows" {
   security_groups             = [aws_security_group.windows.name]
   volume_tags                 = local.windows_tags
   tags = merge(local.windows_tags, {
-    git_file = "windows.tf"
+    git_file = "window-server.tf"
     git_org  = "managedkaos"
     git_repo = "jenkins-development-environment"
   })
@@ -57,7 +57,7 @@ resource "aws_instance" "windows" {
 resource "aws_eip" "windows" {
   vpc = true
   tags = merge(local.windows_tags, {
-    git_file = "windows.tf"
+    git_file = "window-server.tf"
     git_org  = "managedkaos"
     git_repo = "jenkins-development-environment"
   })

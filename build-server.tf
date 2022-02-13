@@ -37,7 +37,11 @@ resource "aws_instance" "build" {
   key_name                    = aws_key_pair.key["amazon"].key_name
   security_groups             = [aws_security_group.build.name]
   volume_tags                 = local.build_server_tags
-  tags                        = local.build_server_tags
+  tags = merge(local.build_server_tags, {
+    git_file = "build-server.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 
   lifecycle {
     create_before_destroy = true
