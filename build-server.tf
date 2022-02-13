@@ -55,5 +55,4 @@ resource "aws_eip" "build" {
 resource "aws_eip_association" "build" {
   instance_id   = aws_instance.build.id
   allocation_id = aws_eip.build.id
-
 }
