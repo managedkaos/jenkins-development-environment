@@ -45,11 +45,11 @@ resource "aws_instance" "windows" {
   instance_type               = "t3a.medium"
   associate_public_ip_address = true
   disable_api_termination     = false
-  user_data                   = file("${path.module}/user_data/windows.txt")
-  key_name                    = aws_key_pair.windows.key_name
-  security_groups             = [aws_security_group.windows.name]
-  volume_tags                 = local.windows_tags
-  tags                        = local.windows_tags
+  # user_data                   = file("${path.module}/user_data/windows.txt")
+  key_name        = aws_key_pair.windows.key_name
+  security_groups = [aws_security_group.windows.name]
+  volume_tags     = local.windows_tags
+  tags            = local.windows_tags
 
   lifecycle {
     create_before_destroy = "true"
