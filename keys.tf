@@ -10,7 +10,7 @@ resource "aws_key_pair" "key" {
   public_key      = tls_private_key.key[each.key].public_key_openssh
 
   provisioner "local-exec" {
-    command = "echo '${tls_private_key.key[each.key].private_key_pem}' > ./${each.key}.pem && chmod 600 ./${each.key}"
+    command = "echo '${tls_private_key.key[each.key].private_key_pem}' > ./keys/${each.key}.pem && chmod 600 ./keys/${each.key}.pem"
   }
   tags = {
     git_file = "keys.tf"
