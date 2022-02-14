@@ -13,7 +13,7 @@ resource "aws_key_pair" "key" {
     command = "echo '${tls_private_key.key[each.key].private_key_pem}' > ./keys/${each.key}.pem && chmod 600 ./keys/${each.key}.pem"
   }
   tags = {
-    git_file = "keys.tf"
+    git_file = "ssh_key.tf"
     git_org  = "managedkaos"
     git_repo = "jenkins-development-environment"
   }

@@ -29,8 +29,8 @@ resource "aws_security_group" "build" {
 }
 
 resource "aws_instance" "build" {
-  ami                         = data.aws_ami.ami["ubuntu"].id
-  instance_type               = "t3a.medium"
+  ami                         = data.aws_ami.ami["amazon"].id
+  instance_type               = "t3a.nano"
   associate_public_ip_address = true
   disable_api_termination     = false
   user_data                   = file("${path.module}/user_data/build-server.txt")
