@@ -64,7 +64,11 @@ resource "aws_eip_association" "build" {
 }
 
 output "build_public_dns" {
-  value = aws_instance.jenkins.public_dns
+  value = aws_instance.build.public_dns
+}
+
+output "build_private_dns" {
+  value = aws_instance.build.private_dns
 }
 
 output "build_instance_id" {
