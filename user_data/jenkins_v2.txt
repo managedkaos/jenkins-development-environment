@@ -25,17 +25,17 @@ apt -y install \
 apt -y install jenkins
 
 # configure jenkins
-#echo "JAVA_ARGS=\"-Djenkins.install.runSetupWizard=false\"" >> /etc/default/jenkins
+echo "JAVA_ARGS=\"-Djenkins.install.runSetupWizard=false\"" >> /etc/default/jenkins
 
-#wget https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/src/main/resources/jenkins/install/platform-plugins.json
+wget https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/src/main/resources/jenkins/install/platform-plugins.json
 
-#grep suggest platform-plugins.json | cut -d\" -f 4 | tee suggested-plugins.txt
+grep suggest platform-plugins.json | cut -d\" -f 4 | tee suggested-plugins.txt
 
-#wget https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.3/jenkins-plugin-manager-2.12.3.jar
+wget https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.3/jenkins-plugin-manager-2.12.3.jar
 
-#/usr/bin/java -jar ./jenkins-plugin-manager-2.12.3.jar \
-#	--verbose \
-#	--plugin-file ./suggested-plugins.txt
+/usr/bin/java -jar ./jenkins-plugin-manager-2.12.3.jar \
+	--verbose \
+    --plugin-file ./suggested-plugins.txt
 
 # configure nginx
 unlink /etc/nginx/sites-enabled/default
