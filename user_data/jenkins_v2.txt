@@ -42,9 +42,6 @@ wget https://github.com/jenkinsci/plugin-installation-manager-tool/releases/down
 ## run the plugin installation tool
 /usr/bin/java -jar ./jenkins-plugin-manager-2.12.3.jar \
 	--verbose \
-    --available-updates=true \
-    --latest=true \
-    --latest-specified=true \
     --plugin-download-directory=/var/lib/jenkins/plugins \
     --plugin-file=./suggested-plugins.txt >> /var/log/plugin-installation.log
 
