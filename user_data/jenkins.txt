@@ -10,11 +10,34 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
     https://pkg.jenkins.io/debian-stable binary/ | tee \
     /etc/apt/sources.list.d/jenkins.list > /dev/null
 
+# install java, nginx, and jenkins
 apt update
 apt -y upgrade
-apt -y install openjdk-11-jdk nginx
+
+apt -y install \
+    openjdk-11-jdk \
+    nginx \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
 apt -y install jenkins
 
+# configure jenkins
+echo "JAVA_ARGS=\"-Djenkins.install.runSetupWizard=false\"" >> /etc/default/jenkins
+
+wget https://raw.githubusercontent.com/jenkinsci/jenkins/master/core/src/main/resources/jenkins/install/platform-plugins.json
+
+grep suggest platform-plugins.json | cut -d\" -f 4 | tee suggested-plugins.txt
+
+wget https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.12.3/jenkins-plugin-manager-2.12.3.jar
+
+/usr/bin/java -jar ./jenkins-plugin-manager-2.12.3.jar \
+	--verbose \
+	--plugin-file ./suggested-plugins.txt
+
+# configure nginx
 unlink /etc/nginx/sites-enabled/default
 
 tee /etc/nginx/conf.d/jenkins.conf <<EOF
@@ -34,15 +57,8 @@ server {
 EOF
 
 systemctl reload nginx
-systemctl status nginx  | grep Active
-systemctl status jenkins  | grep Active
 
-apt -y install \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
-
+# install docker
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
     gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
@@ -58,3 +74,5 @@ systemctl enable containerd.service
 groupadd docker
 usermod -aG docker ubuntu
 usermod -aG docker jenkins
+
+systemctl restart jenkins
