@@ -4,6 +4,10 @@ web:
 ssh:
 	ssh -i ./keys/ubuntu.pem ubuntu@$(shell terraform output | grep jenkins_public_dns | cut -d\" -f2)
 
+admin:
+	ssh -i ./keys/ubuntu.pem ubuntu@$(shell terraform output | grep jenkins_public_dns | cut -d\" -f2) \
+		sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
 buildserver:
 	ssh -i ./keys/amazon.pem ec2-user@$(shell terraform output | grep build_public_dns | cut -d\" -f2)
 
