@@ -1,5 +1,5 @@
 web:
-	open "http://$(shell terraform output | grep jenkins | grep ec2 | cut -d\" -f2)"
+	open "http://$(shell terraform output | grep jenkins_public_dns | cut -d\" -f2)"
 
 ssh:
 	ssh -i ./keys/ubuntu.pem ubuntu@$(shell terraform output | grep jenkins_public_dns | cut -d\" -f2)
@@ -10,7 +10,7 @@ buildserver:
 stop start password:
 	./scripts/$(@).sh
 
-apply:
+tf apply:
 	terraform apply -auto-approve
 
 output:
