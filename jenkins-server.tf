@@ -39,7 +39,7 @@ resource "aws_instance" "jenkins" {
   instance_type               = "t3a.medium"
   associate_public_ip_address = true
   disable_api_termination     = false
-  user_data                   = file("${path.module}/user_data/jenkins.txt")
+  user_data                   = file("${path.module}/user_data/jenkins_v2.txt")
   key_name                    = aws_key_pair.key["ubuntu"].key_name
   security_groups             = [aws_security_group.jenkins.name]
   volume_tags                 = local.jenkins_tags
@@ -69,7 +69,7 @@ resource "aws_eip_association" "jenkins" {
 }
 
 output "jenkins_public_dns" {
-  value = aws_instance.jenkins.public_dns
+  value = aws_eip.jenkins.public_dns
 }
 
 output "jenkins_instance_id" {

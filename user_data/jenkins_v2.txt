@@ -12,9 +12,9 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
 
 # install java, nginx, and jenkins
 apt update
-apt -y upgrade
+apt -qq upgrade
 
-apt -y install \
+apt -qq install \
     openjdk-11-jdk \
     nginx \
     ca-certificates \
@@ -22,7 +22,7 @@ apt -y install \
     gnupg \
     lsb-release
 
-apt -y install jenkins
+apt -qq install jenkins
 
 # configure jenkins
 echo "JAVA_ARGS=\"-Djenkins.install.runSetupWizard=false\"" >> /etc/default/jenkins
@@ -35,7 +35,7 @@ wget https://github.com/jenkinsci/plugin-installation-manager-tool/releases/down
 
 /usr/bin/java -jar ./jenkins-plugin-manager-2.12.3.jar \
 	--verbose \
-    --plugin-file ./suggested-plugins.txt
+    --plugin-file ./suggested-plugins.txt >> /var/log/plugin-installation.log
 
 # configure nginx
 unlink /etc/nginx/sites-enabled/default
@@ -65,7 +65,7 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 apt update
-apt -y install docker-ce docker-ce-cli containerd.io
+apt -qq install docker-ce docker-ce-cli containerd.io
 docker run hello-world
 
 systemctl enable docker.service
