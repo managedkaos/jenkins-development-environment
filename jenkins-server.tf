@@ -4,7 +4,11 @@ locals {
 
 resource "aws_iam_role" "jenkins" {
   name_prefix = "jenkins-server-"
-  tags        = merge(var.tags, local.tags)
+  tags = merge(var.tags, local.tags, {
+    git_file = "jenkins-server.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -29,17 +33,19 @@ resource "aws_iam_role_policy_attachment" "jenkins" {
 resource "aws_iam_instance_profile" "jenkins" {
   name_prefix = "jenkins-server-"
   role        = aws_iam_role.jenkins.name
-  tags = {
+
+  tags = merge(local.jenkins_tags, {
     git_file = "jenkins-server.tf"
     git_org  = "managedkaos"
     git_repo = "jenkins-development-environment"
-  }
+  })
 }
 
 resource "aws_security_group" "jenkins" {
   name_prefix = "jenkins-server-"
   description = "jenkins"
   vpc_id      = var.vpc_id
+
   tags = merge(local.jenkins_tags, {
     git_file = "jenkins-server.tf"
     git_org  = "managedkaos"
