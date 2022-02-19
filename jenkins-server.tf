@@ -4,6 +4,7 @@ locals {
 
 resource "aws_iam_role" "jenkins" {
   name_prefix = "jenkins-server-"
+
   tags = merge(var.tags, local.tags, {
     git_file = "jenkins-server.tf"
     git_org  = "managedkaos"
