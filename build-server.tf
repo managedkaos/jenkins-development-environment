@@ -2,6 +2,45 @@ locals {
   build_server_tags = merge({ Name : "build-server" }, var.tags, local.tags)
 }
 
+resource "aws_iam_role" "build" {
+  name_prefix = "build-server-"
+
+  tags = merge(local.build_server_tags, {
+    git_file = "build-server.tf"
+    git_org  = "managedkaos"
+  })
+
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : "sts:AssumeRole",
+        "Principal" : {
+          "Service" : "ec2.amazonaws.com"
+        },
+        "Effect" : "Allow",
+        "Sid" : ""
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "build" {
+  role       = aws_iam_role.build.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "build" {
+  name_prefix = "build-server-"
+  role        = aws_iam_role.build.name
+
+  tags = merge(local.build_server_tags, {
+    git_file = "build-server.tf"
+    git_org  = "managedkaos"
+    git_repo = "jenkins-development-environment"
+  })
+}
+
 resource "aws_security_group" "build" {
   name_prefix = "build-server-"
   description = "build"
@@ -37,6 +76,8 @@ resource "aws_instance" "build" {
   key_name                    = aws_key_pair.key["amazon"].key_name
   security_groups             = [aws_security_group.build.name]
   volume_tags                 = local.build_server_tags
+  iam_instance_profile        = aws_iam_instance_profile.build.name
+
   tags = merge(local.build_server_tags, {
     git_file = "build-server.tf"
     git_org  = "managedkaos"

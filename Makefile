@@ -11,6 +11,10 @@ adminpassword:
 buildserver:
 	ssh -i ./keys/amazon.pem ec2-user@$(shell terraform output | grep build_public_dns | cut -d\" -f2)
 
+up: start
+
+down: stop
+
 stop start password:
 	./scripts/$(@).sh
 
