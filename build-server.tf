@@ -8,6 +8,8 @@ resource "aws_iam_role" "build" {
   tags = merge(local.build_server_tags, {
     git_file = "build-server.tf"
     git_org  = "managedkaos"
+    }, {
+    git_repo = "jenkins-development-environment"
   })
 
   assume_role_policy = jsonencode({
