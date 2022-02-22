@@ -6,6 +6,8 @@ choco install nssm -y
 choco install openssh --pre -y
 choco install microsoft-edge git nodejs yarn vim vscode awscli archiver -y
 choco install dotnetcore dotnet4.7.2 -y
+choco install vagrant
+choco install virtualbox
 
 New-NetFirewallRule -Name ssh -DisplayName 'ssh' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 Restart-Computer
