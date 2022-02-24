@@ -2,6 +2,11 @@
 echo "# Getting targets..."
 targets="$(/usr/local/bin/aws --profile jenkins ec2 describe-instances --query 'Reservations[].Instances[][].{Instances: InstanceId}' --output text --filters "Name=tag:Designation,Values=jenkins-development-environment-production" --output=text)"
 
+if [ "$?" -ne 0 ] || [ -z ${targets} ]; then
+    echo "Target selection failed."
+    exit 1
+fi
+
 echo "# $(date) Starting targets..."
 /usr/local/bin/aws --profile jenkins ec2 start-instances --instance-ids ${targets}
 
