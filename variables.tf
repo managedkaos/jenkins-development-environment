@@ -30,15 +30,15 @@ variable "ami" {
       "name"                = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
       "virtualization_type" = ["hvm"]
     }
-    "amazon" = {
-      "owners"              = ["amazon"]
-      "name"                = ["amzn2-ami-hvm-*-x86_64-ebs"]
-      "virtualization_type" = ["hvm"]
-    }
-    "windows" = {
-      "owners"              = ["801119661308"]
-      "name"                = ["Windows_Server-2022-English-Full-Base-2022.*"]
-      "virtualization_type" = ["hvm"]
-    }
+    # "amazon" = {
+    #   "owners"              = ["amazon"]
+    #   "name"                = ["amzn2-ami-hvm-*-x86_64-ebs"]
+    #   "virtualization_type" = ["hvm"]
+    # }
+    # "windows" = {
+    #   "owners"              = ["801119661308"]
+    #   "name"                = ["Windows_Server-2022-English-Full-Base-2022.*"]
+    #   "virtualization_type" = ["hvm"]
+    # }
   }
 }

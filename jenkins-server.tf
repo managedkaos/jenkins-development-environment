@@ -76,7 +76,7 @@ resource "aws_security_group" "jenkins" {
 }
 
 resource "aws_instance" "jenkins" {
-  ami                         = data.aws_ami.ami["ubuntu"].id
+  ami                         = coalesce("ami-0637e7dc7fcc9a2d9", data.aws_ami.ami["ubuntu"].id)
   instance_type               = "t3a.medium"
   associate_public_ip_address = true
   disable_api_termination     = false
