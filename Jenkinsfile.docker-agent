@@ -1,0 +1,35 @@
+pipeline {
+    agent {
+        docker { image 'public.ecr.aws/docker/library/maven:latest' }
+    }
+    stages {
+        stage('Source') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/managedkaos/jenkins-essential-2468076.git',
+                    credentialsId: 'e3e55177-b2ba-425a-a6fb-448ba7789d74'
+            }
+        }
+        stage('Clean') {
+            steps {
+                dir("${env.WORKSPACE}/Ch04/04_02-ssh-agent"){
+                    sh 'mvn clean'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir("${env.WORKSPACE}/Ch04/04_02-ssh-agent"){
+                    sh 'mvn test'
+                }
+            }
+        }
+        stage('Package') {
+            steps {
+                dir("${env.WORKSPACE}/Ch04/04_02-ssh-agent"){
+                    sh 'mvn package -DskipTests'
+                }
+            }
+        }
+    }
+}
